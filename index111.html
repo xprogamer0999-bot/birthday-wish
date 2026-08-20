@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Happy Birthday Anuu ✨</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,400&family=Plus+Jakarta+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #FAFAFA;
+      --text-main: #2C2C2C;
+      --text-muted: #8C8C8C;
+      --accent: #E5A9A9;
+      --font-serif: 'Cormorant Garamond', serif;
+      --font-sans: 'Plus Jakarta Sans', sans-serif;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background-color: var(--bg);
+      color: var(--text-main);
+      font-family: var(--font-sans);
+      overflow: hidden;
+      height: 100vh;
+      width: 100vw;
+      user-select: none;
+    }
+
+    /* Container & Slides */
+    .slide-container {
+      height: 100vh;
+      width: 100vw;
+      position: relative;
+    }
+
+    .slide {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding: 2rem;
+      text-align: center;
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 0.8s ease, transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+      transform: translateY(20px);
+    }
+
+    .slide.active {
+      opacity: 1;
+      visibility: visible;
+      transform: translateY(0);
+    }
+
+    /* Typography Utilities */
+    .serif-title {
+      font-family: var(--font-serif);
+      font-size: clamp(2.5rem, 6vw, 4.5rem);
+      font-weight: 300;
+      line-height: 1.2;
+      margin-bottom: 1.5rem;
+      letter-spacing: -0.02em;
+    }
+
+    .serif-subtitle {
+      font-family: var(--font-serif);
+      font-size: clamp(1.8rem, 4vw, 3rem);
+      font-style: italic;
+      color: #666;
+      margin-bottom: 1rem;
+    }
+
+    .body-text {
+      font-size: clamp(1rem, 2vw, 1.25rem);
+      font-weight: 300;
+      color: var(--text-muted);
+      max-width: 580px;
+      line-height: 1.8;
+      letter-spacing: 0.01em;
+    }
+
+    .accent-text {
+      color: var(--text-main);
+      font-weight: 400;
+    }
+
+    .chinese-quote {
+      font-family: var(--font-serif);
+      font-size: clamp(2rem, 5vw, 3.5rem);
+      margin: 1.5rem 0 0.5rem 0;
+      color: var(--text-main);
+    }
+
+    /* Counter Display */
+    .counter-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1.5rem;
+      margin-top: 2rem;
+      max-width: 500px;
+      width: 100%;
+    }
+
+    .counter-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .counter-value {
+      font-family: var(--font-serif);
+      font-size: clamp(2rem, 4vw, 3.5rem);
+      font-weight: 300;
+    }
+
+    .counter-label {
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.15em;
+      color: var(--text-muted);
+      margin-top: 0.25rem;
+    }
+
+    /* Navigation UI */
+    .nav-controls {
+      position: fixed;
+      bottom: 2.5rem;
+      left: 0;
+      right: 0;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0 3rem;
+      z-index: 100;
+    }
+
+    .btn-nav {
+      background: none;
+      border: none;
+      font-family: var(--font-sans);
+      font-size: 0.85rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--text-main);
+      cursor: pointer;
+      padding: 0.5rem 1rem;
+      transition: opacity 0.3s ease;
+    }
+
+    .btn-nav:hover {
+      opacity: 0.5;
+    }
+
+    .btn-nav:disabled {
+      opacity: 0.1;
+      cursor: default;
+    }
+
+    .progress-bar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      height: 2px;
+      background-color: var(--text-main);
+      transition: width 0.4s ease;
+      z-index: 100;
+    }
+
+    .slide-indicator {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      letter-spacing: 0.1em;
+    }
+
+    /* Butterfly Container */
+    .butterfly-field {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      top: 0;
+      left: 0;
+      pointer-events: none;
+      overflow: hidden;
+    }
+
+    .butterfly {
+      position: absolute;
+      font-size: 1.5rem;
+      opacity: 0;
+      animation: float 8s infinite ease-in-out;
+    }
+
+    @keyframes float {
+      0% {
+        transform: translateY(105vh) translateX(0) rotate(0deg);
+        opacity: 0;
+      }
+      20% {
+        opacity: 0.6;
+      }
+      80% {
+        opacity: 0.6;
+      }
+      100% {
+        transform: translateY(-10vh) translateX(50px) rotate(20deg);
+        opacity: 0;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="progress-bar" id="progress"></div>
+
+  <main class="slide-container">
+    
+    <!-- Slide 1 -->
+    <section class="slide active">
+      <p class="body-text" style="text-transform: uppercase; letter-spacing: 0.2em; font-size: 0.75rem; margin-bottom: 1rem;">A little space built just for you</p>
+      <h1 class="serif-title">Happy Birthday, Anuu.</h1>
+      <p class="body-text">Take a quiet moment, pause for a second, and step inside.</p>
+    </section>
+
+    <!-- Slide 2 -->
+    <section class="slide">
+      <h2 class="serif-title">The world became lighter on this day.</h2>
+      <p class="body-text">Since <span class="accent-text">August 21, 2009</span>, you have been slowly changing the temperature of every room you walk into—bringing warmth without even trying.</p>
+    </section>
+
+    <!-- Slide 3 -->
+    <section class="slide">
+      <p class="body-text" style="letter-spacing: 0.1em; text-transform: uppercase; font-size: 0.8rem;">Every second since you arrived</p>
+      <div class="counter-grid">
+        <div class="counter-item">
+          <span class="counter-value" id="days">00</span>
+          <span class="counter-label">Days</span>
+        </div>
+        <div class="counter-item">
+          <span class="counter-value" id="hours">00</span>
+          <span class="counter-label">Hours</span>
+        </div>
+        <div class="counter-item">
+          <span class="counter-value" id="minutes">00</span>
+          <span class="counter-label">Mins</span>
+        </div>
+        <div class="counter-item">
+          <span class="counter-value" id="seconds">00</span>
+          <span class="counter-label">Secs</span>
+        </div>
+      </div>
+      <p class="body-text" style="margin-top: 2rem;">A counter of the time the universe has been better because you’re in it.</p>
+    </section>
+
+    <!-- Slide 4 -->
+    <section class="slide">
+      <h2 class="serif-subtitle">A memory I keep close...</h2>
+      <p class="body-text">Of all the conversations we have ever shared, there is one moment that stays completely clear in my mind. The day I let down my guard and told you how I felt.</p>
+    </section>
+
+    <!-- Slide 5 -->
+    <section class="slide">
+      <p class="body-text">I told you <span class="accent-text">"I love you"</span> with all the honesty I had.</p>
+      <div class="chinese-quote">我 也 爱 你</div>
+      <p class="body-text" style="font-style: italic; margin-top: 0.5rem;">"I love you too."</p>
+      <p class="body-text" style="margin-top: 1.5rem;">When you answered back in Chinese, it wasn't just a response—it became one of my absolute favorite core memories.</p>
+    </section>
+
+    <!-- Slide 6 -->
+    <section class="slide">
+      <h2 class="serif-title">It’s the subtle things about you.</h2>
+      <p class="body-text">The way you listen, the small gestures you make without realizing, and how effortlessly genuine you are. You make life feel simple, beautiful, and calm.</p>
+    </section>
+
+    <!-- Slide 7 (Butterfly Accent) -->
+    <section class="slide">
+      <div class="butterfly-field" id="butterfly-container"></div>
+      <h2 class="serif-title" style="position: relative; z-index: 2;">Soft & Graceful</h2>
+      <p class="body-text" style="position: relative; z-index: 2;">Like a butterfly moving quietly through the air, you bring light and color into my life without ever needing to demand attention.</p>
+    </section>
+
+    <!-- Slide 8 -->
+    <section class="slide">
+      <h2 class="serif-subtitle">Looking forward</h2>
+      <p class="body-text">I hope this year brings you peace in quiet moments, strength when you need it, and an endless amount of reasons to smile. I’m endlessly grateful to share this journey with you.</p>
+    </section>
+
+    <!-- Slide 9 -->
+    <section class="slide">
+      <h2 class="serif-title">Never forget how special you are.</h2>
+      <p class="body-text">Not just today on your birthday, but every single day that follows.</p>
+    </section>
+
+    <!-- Slide 10 -->
+    <section class="slide">
+      <p class="body-text" style="letter-spacing: 0.15em; text-transform: uppercase; font-size: 0.8rem; margin-bottom: 1rem;">Always & Forever</p>
+      <h2 class="serif-title">Happy Birthday, Anuu.</h2>
+      <p class="body-text" style="font-style: italic;">Thank you for being exactly who you are.</p>
+    </section>
+
+  </main>
+
+  <nav class="nav-controls">
+    <button class="btn-nav" id="prevBtn" disabled>Back</button>
+    <span class="slide-indicator" id="indicator">01 / 10</span>
+    <button class="btn-nav" id="nextBtn">Next</button>
+  </nav>
+
+  <script>
+    // State
+    let currentSlide = 0;
+    const slides = document.querySelectorAll('.slide');
+    const totalSlides = slides.length;
+
+    // Elements
+    const prevBtn = document.getElementById('prevBtn');
+    const nextBtn = document.getElementById('nextBtn');
+    const indicator = document.getElementById('indicator');
+    const progressBar = document.getElementById('progress');
+
+    // Slide Navigation Logic
+    function updateSlides() {
+      slides.forEach((slide, index) => {
+        if (index === currentSlide) {
+          slide.classList.add('active');
+        } else {
+          slide.classList.remove('active');
+        }
+      });
+
+      // UI updates
+      indicator.innerText = `${String(currentSlide + 1).padStart(2, '0')} / ${String(totalSlides).padStart(2, '0')}`;
+      progressBar.style.width = `${((currentSlide + 1) / totalSlides) * 100}%`;
+      
+      prevBtn.disabled = currentSlide === 0;
+      if (currentSlide === totalSlides - 1) {
+        nextBtn.innerText = 'Restart';
+      } else {
+        nextBtn.innerText = 'Next';
+      }
+    }
+
+    nextBtn.addEventListener('click', () => {
+      if (currentSlide < totalSlides - 1) {
+        currentSlide++;
+      } else {
+        currentSlide = 0;
+      }
+      updateSlides();
+    });
+
+    prevBtn.addEventListener('click', () => {
+      if (currentSlide > 0) {
+        currentSlide--;
+        updateSlides();
+      }
+    });
+
+    // Keyboard navigation
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowRight' || e.key === ' ') {
+        nextBtn.click();
+      } else if (e.key === 'ArrowLeft') {
+        prevBtn.click();
+      }
+    });
+
+    // Day Counter Logic (From Aug 21, 2009)
+    const birthDate = new Date('2009-08-21T00:00:00');
+
+    function updateCounter() {
+      const now = new Date();
+      const diff = now - birthDate;
+
+      const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+      const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
+      const minutes = Math.floor((diff / 1000 / 60) % 60);
+      const seconds = Math.floor((diff / 1000) % 60);
+
+      document.getElementById('days').innerText = String(days).toLocaleString();
+      document.getElementById('hours').innerText = String(hours).padStart(2, '0');
+      document.getElementById('minutes').innerText = String(minutes).padStart(2, '0');
+      document.getElementById('seconds').innerText = String(seconds).padStart(2, '0');
+    }
+
+    setInterval(updateCounter, 1000);
+    updateCounter();
+
+    // Subtle Butterfly Generation on Slide 7
+    const butterflyContainer = document.getElementById('butterfly-container');
+    const butterflyIcons = ['🦋'];
+
+    for (let i = 0; i < 8; i++) {
+      const butterfly = document.createElement('div');
+      butterfly.className = 'butterfly';
+      butterfly.innerText = butterflyIcons[0];
+      butterfly.style.left = `${Math.random() * 80 + 10}%`;
+      butterfly.style.animationDelay = `${Math.random() * 5}s`;
+      butterfly.style.animationDuration = `${6 + Math.random() * 4}s`;
+      butterflyContainer.appendChild(butterfly);
+    }
+
+    // Init
+    updateSlides();
+  </script>
+</body>
+</html>
